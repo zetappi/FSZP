@@ -16,6 +16,27 @@ metallic = 0.3
 radius = 1.2
 height = 5.0
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1"]
+direction = Vector3(0, 1, 0)
+spread = 25.0
+initial_velocity_min = 1.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.3
+scale_max = 1.2
+color = Color(0.55, 0.55, 0.55, 0.0)
+
+[sub_resource type="Gradient" id="Gradient_1"]
+colors = PackedColorArray(0.6, 0.6, 0.6, 0.6, 0.3, 0.3, 0.3, 0.0)
+offsets = PackedFloat32Array(0.0, 1.0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1"]
+gradient = SubResource("Gradient_1")
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 0.15
+height = 0.3
+
 [node name="Pirate" type="Node3D"]
 script = ExtResource("1")
 bullet_scene = ExtResource("2")
@@ -33,3 +54,14 @@ shape = SubResource("CapsuleShape3D_1")
 
 [node name="Muzzle" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.0)
+
+[node name="DamageSmoke" type="GPUParticles3D" parent="."]
+emitting = true
+amount = 60
+lifetime = 1.5
+one_shot = false
+explosiveness = 0.0
+speed_scale = 0.0
+process_material = SubResource("ParticleProcessMaterial_1")
+draw_pass_1 = SubResource("SphereMesh_1")
+visibility_aabb = AABB(-10, -10, -10, 20, 20, 20)

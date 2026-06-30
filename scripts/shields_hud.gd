@@ -61,6 +61,19 @@ func take_hit(direction_local: Vector3, damage: float) -> void:
 		shield_right = maxf(shield_right - damage, 0.0)
 
 func _draw() -> void:
+	# contatore missili
+	var player := get_tree().get_first_node_in_group("player")
+	if player:
+		var count: int = player.missiles_count
+		var col := Color(0.0, 0.85, 0.35, 0.9) if count > 0 else Color(0.9, 0.15, 0.1, 0.9)
+		draw_string(ThemeDB.fallback_font, Vector2(0, -20),
+			"MSL: " + str(count), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, col)
+
+		var nuke_count: int = player.nukes_count
+		var nuke_col := Color(0.1, 1.0, 0.2, 0.9) if nuke_count > 0 else Color(0.9, 0.15, 0.1, 0.9)
+		draw_string(ThemeDB.fallback_font, Vector2(0, -38),
+			"NUKE: " + str(nuke_count), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, nuke_col)
+
 	var values := [shield_left, shield_front, shield_back, shield_right]
 	var total_w := (BAR_WIDTH + BAR_SPACING) * 4 - BAR_SPACING
 	var start_x := (size.x - total_w) * 0.5

@@ -3,6 +3,7 @@ extends Node3D
 # ── Hull ──────────────────────────────────────────────────
 @export var max_hull:         float = 3.0   # colpi necessari per distruggerla
 var _hull: float = 3.0
+@onready var _smoke: GPUParticles3D = $DamageSmoke
 
 # ── Parametri ──────────────────────────────────────────────
 @export var bullet_scene:     PackedScene
@@ -33,6 +34,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_player = get_tree().get_first_node_in_group("player")
 	_enter_idle()
+	# fumo spento finché non subisce danni
+	if is_instance_valid(_smoke):
+		_smoke.speed_scale = 0.0
 
 # ── Macchina a stati ───────────────────────────────────────
 func _enter_idle() -> void:
@@ -109,13 +113,25 @@ func _fire() -> void:
 
 func take_damage(amount: float = 1.0) -> void:
 	_hull -= amount
-	# feedback visivo: scurisce il colore all'aumentare del danno
+	var t := clampf(_hull / max_hull, 0.0, 1.0)
+
+	# feedback visivo colore
 	var mesh := get_node_or_null("MeshInstance3D")
 	if mesh:
 		var mat := mesh.material_override as StandardMaterial3D
 		if mat:
-			var t := clampf(_hull / max_hull, 0.0, 1.0)
 			mat.albedo_color = Color(0.55 * t + 0.4, 0.1 * t, 0.05 * t, 1.0)
+
+	# fumo proporzionale al danno tramite speed_scale e alpha
+	if is_instance_valid(_smoke):
+		var damage_ratio := 1.0 - t   # 0 = integro, 1 = quasi distrutto
+		_smoke.speed_scale = damage_ratio * 2.0
+		var proc_mat := _smoke.process_material as ParticleProcessMaterial
+		if proc_mat:
+			proc_mat.initial_velocity_min = damage_ratio * 2.0
+			proc_mat.initial_velocity_max = damage_ratio * 8.0
+			proc_mat.color = Color(0.6, 0.6, 0.6, damage_ratio * 0.8)
+
 	if _hull <= 0.0:
 		explode()
 
