@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://steroid001"]
+
+[ext_resource type="Script" path="res://scripts/asteroid.gd" id="1_asteroid"]
+[ext_resource type="PackedScene" uid="uid://explosionfx001" path="res://scenes/ExplosionFX.tscn" id="2_fx"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 1.0
+height = 2.0
+radial_segments = 16
+rings = 8
+
+[node name="Asteroid" type="RigidBody3D"]
+script = ExtResource("1_asteroid")
+explosion_particles = ExtResource("2_fx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_1")

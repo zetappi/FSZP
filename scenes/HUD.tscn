@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/radar.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/shields_hud.gd" id="2"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="Radar" type="Control" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -310.0
+offset_right = -10.0
+offset_bottom = -10.0
+script = ExtResource("1")
+radar_radius = 130.0
+radar_range = 300.0
+ellipse_y_scale = 0.35
+line_max_height = 55.0
+
+[node name="Shields" type="Control" parent="."]
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -200.0
+offset_right = 180.0
+offset_bottom = -20.0
+script = ExtResource("2")
