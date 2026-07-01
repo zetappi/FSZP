@@ -3,7 +3,7 @@ extends Node3D
 @export var speed:        float = 45.0
 @export var turn_speed:   float = 2.5    # rad/s guida proporzionale
 @export var lifetime:     float = 12.0
-@export var hit_radius:   float = 5.0
+@export var hit_radius:   float = 18.0
 
 var target: Node3D = null
 

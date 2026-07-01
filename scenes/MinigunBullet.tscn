@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_bullet"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
+radius = 0.06
+height = 2.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+shading_mode = 0
+albedo_color = Color(1.0, 0.75, 0.1, 1)
+emission_enabled = true
+emission = Color(1.0, 0.6, 0.05, 1)
+emission_energy_multiplier = 6.0
+
+[node name="MinigunBullet" type="Node3D"]
+script = ExtResource("1_bullet")
+speed = 800.0
+lifetime = 0.28
+damage = 0.08
+hit_radius = 2.5
+is_enemy = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_1")
+material_override = SubResource("StandardMaterial3D_1")

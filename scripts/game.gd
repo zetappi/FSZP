@@ -9,6 +9,7 @@ func _ready() -> void:
 	_spawn_field()
 	_spawn_hud()
 	_spawn_pirate()
+	_spawn_ring_base()
 
 func _spawn_pirate() -> void:
 	var pirate_scene: PackedScene = load("res://scenes/Pirate.tscn")
@@ -17,7 +18,7 @@ func _spawn_pirate() -> void:
 		return
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
-	for i in 5:
+	for i in 1:
 		var p: Node3D = pirate_scene.instantiate()
 		add_child(p)
 		p.global_position = Vector3(
@@ -32,6 +33,21 @@ func _spawn_hud() -> void:
 		add_child(hud_scene.instantiate())
 	else:
 		push_error("HUD.tscn non trovato")
+
+func _spawn_ring_base() -> void:
+	var scene: PackedScene = load("res://scenes/RingBase.tscn")
+	if scene == null:
+		push_error("RingBase.tscn non trovato")
+		return
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var dist: float = rng.randf_range(600.0, 900.0)
+	var angle: float = rng.randf_range(0.0, TAU)
+	var elev: float  = rng.randf_range(-60.0, 60.0)
+	var pos := Vector3(cos(angle) * dist, elev, sin(angle) * dist)
+	var ring: Node3D = scene.instantiate()
+	add_child(ring)
+	ring.global_position = pos
 
 func _spawn_field() -> void:
 	var rng := RandomNumberGenerator.new()

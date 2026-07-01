@@ -4,7 +4,7 @@ extends Node3D
 @export var turn_speed:  float = 1.8
 @export var lifetime:    float = 15.0
 @export var blast_radius: float = 50.0
-@export var hit_radius:  float = 5.0
+@export var hit_radius:  float = 18.0
 
 var target: Node3D = null
 var _timer: float = 0.0

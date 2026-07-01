@@ -59,6 +59,8 @@ func _draw_targets(center: Vector2) -> void:
 		targets.append({"node": n, "type": "enemy"})
 	for n in get_tree().get_nodes_in_group("containers"):
 		targets.append({"node": n, "type": "container"})
+	for n in get_tree().get_nodes_in_group("structures"):
+		targets.append({"node": n, "type": "structure"})
 
 	for t in targets:
 		var node: Node3D = t["node"]
@@ -90,6 +92,8 @@ func _draw_targets(center: Vector2) -> void:
 				col = Color(1.0, 0.15, 0.15, 1.0)
 			"container":
 				col = Color(0.3, 0.85, 1.0, 1.0)
+			"structure":
+				col = Color(1.0, 0.8, 0.0, 1.0)
 			_:
 				col = COL_ABOVE if local.y >= 0.0 else COL_BELOW
 

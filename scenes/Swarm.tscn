@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/swarm.gd" id="1"]
+[ext_resource type="PackedScene" path="res://assets/3dobjects/sciame blu.glb" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/MinigunBullet.tscn" id="3"]
+
+[node name="Swarm" type="Node3D"]
+script = ExtResource("1")
+minigun_scene = ExtResource("3")
+
+[node name="Model" parent="." instance=ExtResource("2")]
+scale = Vector3(6.0, 6.0, 6.0)
+
+[node name="MinigunRight" type="Node3D" parent="."]
+[node name="MinigunLeft" type="Node3D" parent="."]
