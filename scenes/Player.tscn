@@ -13,6 +13,29 @@ emission = Color(0.0, 0.9, 1.0, 1.0)
 emission_energy_multiplier = 4.0
 transparency = 1
 
+[sub_resource type="SphereMesh" id="SphereMesh_starfield"]
+radius = 0.015
+height = 0.03
+radial_segments = 4
+rings = 2
+
+[sub_resource type="StandardMaterial3D" id="StarMat"]
+shading_mode = 0
+albedo_color = Color(0.85, 0.92, 1.0, 1.0)
+emission_enabled = true
+emission = Color(0.85, 0.92, 1.0, 1.0)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="ParticleProcessMaterial" id="StarfieldPPM"]
+direction = Vector3(0, 0, 1)
+spread = 80.0
+initial_velocity_min = 20.0
+initial_velocity_max = 60.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.4
+scale_max = 1.0
+lifetime_randomness = 0.4
+
 [node name="Player" type="Node3D"]
 script = ExtResource("1_player")
 bullet_scene = ExtResource("2_bullet")
@@ -30,3 +53,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0)
 [node name="TractorBeam" type="MeshInstance3D" parent="."]
 visible = false
 material_override = SubResource("StandardMaterial3D_1")
+
+[node name="Starfield" type="GPUParticles3D" parent="."]
+emitting = true
+amount = 300
+lifetime = 2.5
+one_shot = false
+explosiveness = 0.0
+randomness = 1.0
+visibility_aabb = AABB(-120, -120, -120, 240, 240, 240)
+process_material = SubResource("StarfieldPPM")
+draw_pass_1 = SubResource("SphereMesh_starfield")
+speed_scale = 0.0

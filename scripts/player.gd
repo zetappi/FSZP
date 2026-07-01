@@ -11,6 +11,9 @@ extends Node3D
 @export var missiles_count: int   = 4
 @export var nukes_count:    int   = 2
 
+var missiles_count_max: int = 4
+var nukes_count_max:    int = 2
+
 var cargo_collected: int   = 0
 var _throttle:       float = 0.0
 var _fire_cooldown:  float = 0.0
@@ -23,16 +26,22 @@ var _lock_target:  Node3D = null
 var _lock_timer:   float  = 0.0
 var _locked:       bool   = false
 
-@onready var _muzzle:       Node3D         = $Muzzle
-@onready var _tractor_beam: MeshInstance3D = $TractorBeam
-@onready var _camera:       Camera3D       = $Camera3D
+@onready var _muzzle:       Node3D          = $Muzzle
+@onready var _tractor_beam: MeshInstance3D  = $TractorBeam
+@onready var _camera:       Camera3D        = $Camera3D
+@onready var _starfield:    GPUParticles3D  = $Starfield
 var _targeting_hud: Control = null
 
 func _ready() -> void:
 	add_to_group("player")
+	missiles_count_max = missiles_count
+	nukes_count_max    = nukes_count
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	await get_tree().process_frame
 	_targeting_hud = get_tree().get_first_node_in_group("targeting_hud")
+
+const FOV_STEPS := [60.0, 15.0, 6.0]
+var _fov_index: int = 0
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -42,6 +51,9 @@ func _input(event: InputEvent) -> void:
 		_try_fire()
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if event.is_action_pressed("fov_toggle"):
+		_fov_index = (_fov_index + 1) % FOV_STEPS.size()
+		_camera.fov = FOV_STEPS[_fov_index]
 
 func _process(delta: float) -> void:
 	rotate_y(-Input.get_axis("look_right", "look_left") * 1.5 * delta)
@@ -54,6 +66,7 @@ func _process(delta: float) -> void:
 		_throttle = maxf(_throttle - 15.0 * delta, 0.0)
 
 	global_position += -global_transform.basis.z * _throttle * delta
+	_starfield.speed_scale = _throttle / 80.0 * 3.0
 
 	_fire_cooldown -= delta
 	if Input.is_action_pressed("fire") and _fire_cooldown <= 0.0:
